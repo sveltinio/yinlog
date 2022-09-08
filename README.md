@@ -12,4 +12,9 @@ Lightweight and easy logger for Go.
 
 ## :free: License
 
-Sveltin is free and open-source software licensed under the MIT License.
+yinlog is free and open-source software licensed under the MIT License.
+
+***
+Made with [Charm](https://charm.sh).
+
+<a href="https://charm.sh/"><img alt="The Charm logo" src="https://stuff.charm.sh/charm-badge-unrounded.jpg" width="400"></a>
