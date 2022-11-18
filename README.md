@@ -8,6 +8,14 @@ Lightweight and glossy logger for Go.
     <a href="https://github.com/sveltinio/prompts/blob/main/LICENSE" target="_blank">
         <img src="https://img.shields.io/badge/license-mit-blue?style=flat-square&logo=none" alt="license" />
     </a>
+     &nbsp;
+     <a href="https://goreportcard.com/report/github.com/sveltinio/yinlog/" target="_blank">
+        <img src="https://goreportcard.com/badge/github.com/sveltinio/yinlog" alt="go report card" />
+    </a>
+    &nbsp;
+    <a href="https://pkg.go.dev/github.com/sveltinio/yinlog/" target="_blank">
+        <img src="https://pkg.go.dev/badge/github.com/sveltinio/yinlog/.svg" alt="go reference" />
+    </a>
 </p>
 
 ### Default
