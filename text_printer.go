@@ -56,27 +56,27 @@ func (tp *TextPrinter) Print(msg string) {
 }
 
 // Format defines how the TextPrinter will format a log entry.
-func (tp *TextPrinter) Format(item *LogEntry) string {
-	if item.IsListLogger() {
-		return formatList(item, tp.Options)
+func (tp *TextPrinter) Format(entry *LogEntry) string {
+	if entry.IsListLogger() {
+		return formatList(entry, tp.Options)
 	}
-	return formatSingle(item, tp.Options)
+	return formatSingle(entry, tp.Options)
 }
 
 //=============================================================================
 
 // Format defines how a single log entry will be formatted by the TextLogger printer.
-func formatSingle(item *LogEntry, options *PrinterOptions) string {
-	return fmt.Sprintf("%s%s %s", item.prefix, formatMarkup(item.Level, options), formatText(item.Message))
+func formatSingle(entry *LogEntry, options *PrinterOptions) string {
+	return fmt.Sprintf("%s%s %s", entry.prefix, formatMarkup(entry.Level, options), formatText(entry.Message))
 }
 
 // FormatList defines how a log entry with List will be formatted by the TextLogger printer.
-func formatList(item *LogEntry, options *PrinterOptions) string {
+func formatList(entry *LogEntry, options *PrinterOptions) string {
 	var buffer bytes.Buffer
-	if item.Message != "" {
-		fmt.Fprintf(&buffer, "%s\n", formatListTitle(item.Message))
+	if entry.Message != "" {
+		fmt.Fprintf(&buffer, "%s\n", formatListTitle(entry.Message))
 	}
-	for _, line := range item.Entries {
+	for _, line := range entry.Entries {
 		fmt.Fprintf(&buffer, "%s\n", formatListItem(&line, options))
 	}
 	return buffer.String()
@@ -86,9 +86,9 @@ func formatListTitle(msg string) string {
 	return listTitleStyle(msg)
 }
 
-func formatListItem(item *LogEntry, options *PrinterOptions) string {
-	text := fmt.Sprintf("%s %s %s", item.prefix, formatMarkup(item.Level, options), formatText(item.Message))
-	logRow := lipgloss.JoinHorizontal(lipgloss.Center, listItemStyle(text, item.prefix, item.indentSize))
+func formatListItem(entry *LogEntry, options *PrinterOptions) string {
+	text := fmt.Sprintf("%s %s %s", entry.prefix, formatMarkup(entry.Level, options), formatText(entry.Message))
+	logRow := lipgloss.JoinHorizontal(lipgloss.Center, listItemStyle(text, entry.indentSize))
 	return fmt.Sprint(logRow)
 }
 

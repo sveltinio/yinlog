@@ -8,13 +8,14 @@ import (
 
 // LogEntry represents a single log entry.
 type LogEntry struct {
-	Logger     *Logger
-	Level      Level
-	Message    string
-	Entries    []LogEntry
-	prefix     string
-	indentChar string
-	indentSize int
+	Logger        *Logger
+	Level         Level
+	Message       string
+	Entries       []LogEntry
+	prefix        string
+	indentChar    string
+	indentSize    int
+	initialPrefix string
 }
 
 // NewLogEntry returns a new entry.
@@ -34,163 +35,183 @@ func NewListLogger() *LogEntry {
 }
 
 // Title set the test to be used as title for ListLogger.
-func (item *LogEntry) Title(title string) {
-	item.Message = title
+func (entry *LogEntry) Title(title string) {
+	entry.Message = title
 }
 
 // WithList returns a new entry with `entries` set.
-func (item *LogEntry) withList() *LogEntry {
+func (entry *LogEntry) withList() *LogEntry {
 	return &LogEntry{
-		Logger:     item.Logger,
-		Entries:    []LogEntry{},
-		indentChar: "\u0020", //space
-		indentSize: 2,
+		Logger:        entry.Logger,
+		Entries:       []LogEntry{},
+		prefix:        "",
+		initialPrefix: "",
+		indentChar:    "\u0020", //space
+		indentSize:    2,
 	}
 }
 
 // IsListLogger returns true when ListLogger.
-func (item *LogEntry) IsListLogger() bool {
-	return len(item.Entries) > 0
+func (entry *LogEntry) IsListLogger() bool {
+	return len(entry.Entries) > 0
 }
 
 // String returns the entry as string.
-func (item *LogEntry) String() string {
-	return item.Logger.Printer.Format(item)
+func (entry *LogEntry) String() string {
+	return entry.Logger.Printer.Format(entry)
+}
+
+// SetPrefix sets the char used as prefix char for entries. Whitespace as default.
+func (entry *LogEntry) SetPrefix(c string) {
+	entry.prefix = c
+	entry.initialPrefix = c
+}
+
+func (entry *LogEntry) resetPrefix() string {
+	return entry.initialPrefix
 }
 
 // SetIndentChar sets the char used as prefix when indent list entries. Whitespace as default.
-func (item *LogEntry) SetIndentChar(c string) {
-	item.indentChar = c
+func (entry *LogEntry) SetIndentChar(c string) {
+	entry.indentChar = c
 }
 
 // SetIndentSize sets how many time the indent char has to be repeated when indent list entries.
-func (item *LogEntry) SetIndentSize(size int) {
-	item.indentSize = size
+func (entry *LogEntry) SetIndentSize(size int) {
+	entry.indentSize = size
 }
 
 // Append add an entry to the `entries`.
-func (item *LogEntry) Append(level Level, msg string) {
+func (entry *LogEntry) Append(level Level, msg string) {
 	elem := LogEntry{
-		Logger:  item.Logger,
+		Logger:  entry.Logger,
 		Level:   level,
 		Message: msg,
-		prefix:  item.prefix,
+		prefix:  entry.prefix,
 	}
-	item.Entries = append(item.Entries, elem)
+	entry.Entries = append(entry.Entries, elem)
 }
 
 // Render prints log entry when ListLogger.
-func (item *LogEntry) Render() {
-	if item.IsListLogger() {
-		item.Logger.log(item)
+func (entry *LogEntry) Render() {
+	if entry.IsListLogger() {
+		entry.Logger.log(entry)
 	}
 }
 
 // Indent add a string as prefix when indent list entries.
-func (item *LogEntry) Indent() {
-	item.prefix = strings.Repeat(item.indentChar, item.indentSize)
+func (entry *LogEntry) Indent() {
+	entry.prefix = fmt.Sprintf("%s%s%s", entry.prefix, strings.Repeat("\u0020", entry.indentSize), entry.indentChar)
 }
 
 // Unindent resets the indent size.
-func (item *LogEntry) Unindent() {
-	item.indentSize = 0
-	item.Indent()
+func (entry *LogEntry) Unindent() {
+	entry.indentSize = 0
+	entry.Indent()
+	entry.prefix = entry.resetPrefix()
 }
 
 // Plain level message.
-func (item *LogEntry) Plain(msg string) {
-	item.Level = DefaultLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Plain(msg string) {
+	entry.Level = DefaultLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
+}
+
+// Plainln prints a new empty line.
+func (entry *LogEntry) Plainln() {
+	entry.Level = DefaultLevel
+	entry.Message = "\n"
+	entry.Logger.log(entry)
 }
 
 // Debug level message.
-func (item *LogEntry) Debug(msg string) {
-	item.Level = DebugLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Debug(msg string) {
+	entry.Level = DebugLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Info level message.
-func (item *LogEntry) Info(msg string) {
-	item.Level = InfoLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Info(msg string) {
+	entry.Level = InfoLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Error level message.
-func (item *LogEntry) Error(msg string) {
-	item.Level = ErrorLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Error(msg string) {
+	entry.Level = ErrorLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Warning level message.
-func (item *LogEntry) Warning(msg string) {
-	item.Level = WarningLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Warning(msg string) {
+	entry.Level = WarningLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Success level message.
-func (item *LogEntry) Success(msg string) {
-	item.Level = SuccessLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Success(msg string) {
+	entry.Level = SuccessLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Important level message.
-func (item *LogEntry) Important(msg string) {
-	item.Level = ImportantLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Important(msg string) {
+	entry.Level = ImportantLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 }
 
 // Fatal level message.
-func (item *LogEntry) Fatal(msg string) {
-	item.Level = FatalLevel
-	item.Message = msg
-	item.Logger.log(item)
+func (entry *LogEntry) Fatal(msg string) {
+	entry.Level = FatalLevel
+	entry.Message = msg
+	entry.Logger.log(entry)
 	os.Exit(1)
 }
 
 // Plainf level formatted message.
-func (item *LogEntry) Plainf(msg string, v ...interface{}) {
-	item.Plain(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Plainf(msg string, v ...interface{}) {
+	entry.Plain(fmt.Sprintf(msg, v...))
 }
 
 // Debugf level formatted message.
-func (item *LogEntry) Debugf(msg string, v ...interface{}) {
-	item.Debug(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Debugf(msg string, v ...interface{}) {
+	entry.Debug(fmt.Sprintf(msg, v...))
 }
 
 // Infof level formatted message.
-func (item *LogEntry) Infof(msg string, v ...interface{}) {
+func (entry *LogEntry) Infof(msg string, v ...interface{}) {
 
-	item.Info(fmt.Sprintf(msg, v...))
+	entry.Info(fmt.Sprintf(msg, v...))
 }
 
 // Errorf level formatted message.
-func (item *LogEntry) Errorf(msg string, v ...interface{}) {
-	item.Error(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Errorf(msg string, v ...interface{}) {
+	entry.Error(fmt.Sprintf(msg, v...))
 }
 
 // Successf level formatted message.
-func (item *LogEntry) Successf(msg string, v ...interface{}) {
-	item.Success(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Successf(msg string, v ...interface{}) {
+	entry.Success(fmt.Sprintf(msg, v...))
 }
 
 // Warningf level formatted message.
-func (item *LogEntry) Warningf(msg string, v ...interface{}) {
-	item.Warning(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Warningf(msg string, v ...interface{}) {
+	entry.Warning(fmt.Sprintf(msg, v...))
 }
 
 // Importantf level formatted message.
-func (item *LogEntry) Importantf(msg string, v ...interface{}) {
-	item.Important(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Importantf(msg string, v ...interface{}) {
+	entry.Important(fmt.Sprintf(msg, v...))
 }
 
 // Fatalf level formatted message.
-func (item *LogEntry) Fatalf(msg string, v ...interface{}) {
-	item.Fatal(fmt.Sprintf(msg, v...))
+func (entry *LogEntry) Fatalf(msg string, v ...interface{}) {
+	entry.Fatal(fmt.Sprintf(msg, v...))
 }

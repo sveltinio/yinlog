@@ -29,6 +29,11 @@ func (l *Logger) Plain(msg string) {
 	NewLogEntry(l).Plain(msg)
 }
 
+// Plainln prints a new empty line.
+func (l *Logger) Plainln() {
+	NewLogEntry(l).Plainln()
+}
+
 // Debug level message.
 func (l *Logger) Debug(msg string) {
 	NewLogEntry(l).Debug(msg)
@@ -62,6 +67,11 @@ func (l *Logger) Important(msg string) {
 // Fatal level message.
 func (l *Logger) Fatal(msg string) {
 	NewLogEntry(l).Fatal(msg)
+}
+
+// Plainf level formatted message.
+func (l *Logger) Plainf(msg string, v ...interface{}) {
+	NewLogEntry(l).Plainf(msg, v...)
 }
 
 // Debugf level formatted message.

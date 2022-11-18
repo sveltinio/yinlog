@@ -6,16 +6,16 @@ import (
 
 var (
 	timestampStyle = lipgloss.NewStyle().Foreground(muted).Render
-	iconStyle      = func(color lipgloss.AdaptiveColor, s string) string {
-		return lipgloss.NewStyle().Foreground(color).Render(s)
+	iconStyle      = func(color lipgloss.AdaptiveColor, msg string) string {
+		return lipgloss.NewStyle().Foreground(color).Render(msg)
 	}
 
-	levelStyle = func(color lipgloss.AdaptiveColor, s string) string {
-		return lipgloss.NewStyle().Padding(0).Foreground(color).Render(s)
+	levelStyle = func(color lipgloss.AdaptiveColor, msg string) string {
+		return lipgloss.NewStyle().Padding(0).Foreground(color).Render(msg)
 	}
 
-	textStyle = func(color lipgloss.AdaptiveColor, s string) string {
-		return lipgloss.NewStyle().Foreground(color).Render(s)
+	textStyle = func(color lipgloss.AdaptiveColor, msg string) string {
+		return lipgloss.NewStyle().Foreground(color).Render(msg)
 	}
 
 	// List Styles
@@ -23,7 +23,7 @@ var (
 			Padding(0, 1).
 			Italic(true).Underline(true).Render
 
-	listItemStyle = func(s, indentChar string, indentSize int) string {
-		return lipgloss.NewStyle().PaddingLeft(indentSize).Render(indentChar + s)
+	listItemStyle = func(msg string, indentSize int) string {
+		return lipgloss.NewStyle().PaddingLeft(indentSize).Render(msg)
 	}
 )
