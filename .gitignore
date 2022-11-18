@@ -66,3 +66,6 @@ Temporary Items
 *.out
 
 pre-release.sh
+output/**
+vhs/**
+*.tape
