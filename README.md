@@ -18,6 +18,8 @@ Lightweight and glossy logger for Go.
     </a>
 </p>
 
+> NOTE: This package was created before the release of [charmbracelet/log](https://github.com/charmbracelet/log) to provide a simple and glossy logger using [Lip Gloss](https://github.com/charmbracelet/lipgloss) to style and colorize the output. It is not so useful now, I can reach the same results simply configuring `log`.
+
 ### Default
 
 [Source Code](_examples/full-line/main.go)
